@@ -5,7 +5,7 @@
         /// <summary>
         /// Current cursor position.
         /// </summary>
-        private static Point CursorPosition = new();
+        private static readonly Point CursorPosition = new();
 
         /// <summary>
         /// Whose turn it is.
@@ -25,7 +25,7 @@
         /// <summary>
         /// Where all player 1 spots are.
         /// </summary>
-        private static List<Point?> Player1Spots = new()
+        private static readonly List<Point?> Player1Spots = new()
         {
             null,
             null,
@@ -37,7 +37,7 @@
         /// <summary>
         /// Where all player 2 spots are.
         /// </summary>
-        private static List<Point?> Player2Spots = new()
+        private static readonly List<Point?> Player2Spots = new()
         {
             null,
             null,
@@ -54,7 +54,7 @@
         /// <summary>
         /// All board cell.
         /// </summary>
-        private static List<List<BoardCell>> Board = new()
+        private static readonly List<List<BoardCell>> Board = new()
         {
             new List<BoardCell>
             {
@@ -248,8 +248,21 @@
                 }
                 else
                 {
-                    Write(3, top, ConsoleColor.White, $"{i + 1}");
-                    Write(6, top, Player1Color, $"{ps.X + 1}x{ps.Y + 1}");
+                    Write(
+                        3,
+                        top,
+                        ps.Eliminated
+                            ? ConsoleColor.DarkGray
+                            : ConsoleColor.White,
+                        $"{i + 1}");
+
+                    Write(
+                        6,
+                        top,
+                        ps.Eliminated
+                            ? ConsoleColor.DarkGray
+                            : Player1Color,
+                        $"{ps.X + 1}x{ps.Y + 1}");
                 }
             }
 
@@ -274,8 +287,21 @@
                 }
                 else
                 {
-                    Write(3, top, ConsoleColor.White, $"{i + 1}");
-                    Write(6, top, Player2Color, $"{ps.X + 1}x{ps.Y + 1}");
+                    Write(
+                        3,
+                        top,
+                        ps.Eliminated
+                            ? ConsoleColor.DarkGray
+                            : ConsoleColor.White,
+                        $"{i + 1}");
+
+                    Write(
+                        6,
+                        top,
+                        ps.Eliminated
+                            ? ConsoleColor.DarkGray
+                            : Player2Color,
+                        $"{ps.X + 1}x{ps.Y + 1}");
                 }
             }
 
@@ -397,31 +423,23 @@
         {
             var bc = Board[CursorPosition.Y][CursorPosition.X];
             var index = points - 1;
-            var ps = Player1Turn
-                    ? Player1Spots[index]
-                    : Player2Spots[index];
+            var ps1 = Player1Spots[index];
+            var ps2 = Player2Spots[index];
 
-            BoardCell? prev = null;
-
-            for (var i = 0; i < 3; i++)
+            if (Player1Turn &&
+                ps1 != null)
             {
-                prev = Board[i]
-                    .Find(n => n.IsSet &&
-                               n.SetForPlayer1 == Player1Turn &&
-                               n.PointsSet == points);
-
-                if (prev != null)
-                {
-                    break;
-                }
+                // Player X has already placed Y point(s).
+                throw new Exception(
+                    $"Player {(Player1Turn ? "1" : "2")} has already placed {points} point(s).");
             }
 
-            if (prev != null &&
-                ps != null)
+            if (!Player1Turn &&
+                ps2 != null)
             {
-                // Player X has already placed Y points in a cell.
+                // Player X has already placed Y point(s).
                 throw new Exception(
-                    $"Player {(Player1Turn ? "1" : "2")} has already placed {points} points in {ps.Y + 1}x{ps.X + 1}.");
+                    $"Player {(Player1Turn ? "1" : "2")} has already placed {points} point(s).");
             }
 
             if (bc.IsSet)
@@ -436,9 +454,9 @@
                         }
                         else
                         {
-                            // Player 1 can only set a higher number on own cell.
+                            // Player X can only set a higher points value over own points.
                             throw new Exception(
-                                "Player 1 can only set a higher number on own cell.");
+                                $"Player {(Player1Turn ? "1" : "2")} can only set a higher points value over own points.");
                         }
                     }
                     else
@@ -449,9 +467,9 @@
                         }
                         else
                         {
-                            // Player 1 can only set a higher number over enemy cell.
+                            // Player X can only set a higher points value over opponents points.
                             throw new Exception(
-                                "Player 1 can only set a higher number over enemy cell.");
+                                $"Player {(Player1Turn ? "1" : "2")} can only set a higher points value over opponents points.");
                         }
                     }
                 }
@@ -465,9 +483,9 @@
                         }
                         else
                         {
-                            // Player 2 can only set a higher number on own cell.
+                            // Player X can only set a higher points value over own points.
                             throw new Exception(
-                                "Player 2 can only set a higher number on own cell.");
+                                $"Player {(Player1Turn ? "1" : "2")} can only set a higher points value over own points.");
                         }
                     }
                     else
@@ -478,24 +496,35 @@
                         }
                         else
                         {
-                            // Player 2 can only set a higher number over enemy cell.
+                            // Player X can only set a higher points value over opponents points.
                             throw new Exception(
-                                "Player 2 can only set a higher number over enemy cell.");
+                                $"Player {(Player1Turn ? "1" : "2")} can only set a higher points value over opponents points.");
                         }
                     }
                 }
 
-                bc.SetForPlayer1 = !bc.SetForPlayer1;
+                bc.SetForPlayer1 = Player1Turn;
                 bc.PointsSet = points;
 
                 if (Player1Turn)
                 {
+                    for (var i = 0; i < Player1Spots.Count; i++)
+                    {
+                        if (Player1Spots[i] != null &&
+                            Player1Spots[i].X == CursorPosition.X &&
+                            Player1Spots[i].Y == CursorPosition.Y)
+                        {
+                            Player1Spots[i].Eliminated = true;
+                        }
+                    }
+
                     for (var i = 0; i < Player2Spots.Count; i++)
                     {
-                        if (Player2Spots[i]?.X == CursorPosition.X &&
-                            Player2Spots[i]?.Y == CursorPosition.Y)
+                        if (Player2Spots[i] != null &&
+                            Player2Spots[i].X == CursorPosition.X &&
+                            Player2Spots[i].Y == CursorPosition.Y)
                         {
-                            Player2Spots[i] = null;
+                            Player2Spots[i].Eliminated = true;
                         }
                     }
 
@@ -508,10 +537,21 @@
                 {
                     for (var i = 0; i < Player1Spots.Count; i++)
                     {
-                        if (Player1Spots[i]?.X == CursorPosition.X &&
-                            Player1Spots[i]?.Y == CursorPosition.Y)
+                        if (Player1Spots[i] != null &&
+                            Player1Spots[i].X == CursorPosition.X &&
+                            Player1Spots[i].Y == CursorPosition.Y)
                         {
-                            Player1Spots[i] = null;
+                            Player1Spots[i].Eliminated = true;
+                        }
+                    }
+
+                    for (var i = 0; i < Player2Spots.Count; i++)
+                    {
+                        if (Player2Spots[i] != null &&
+                            Player2Spots[i].X == CursorPosition.X &&
+                            Player2Spots[i].Y == CursorPosition.Y)
+                        {
+                            Player2Spots[i].Eliminated = true;
                         }
                     }
 
@@ -523,8 +563,6 @@
             }
             else
             {
-                
-
                 bc.IsSet = true;
                 bc.SetForPlayer1 = Player1Turn;
                 bc.PointsSet = points;
@@ -604,6 +642,11 @@
         /// Current Y position.
         /// </summary>
         public int Y { get; set; }
+
+        /// <summary>
+        /// Whether the points have been eliminated.
+        /// </summary>
+        public bool Eliminated { get; set; }
 
         /// <summary>
         /// Set a new point.
