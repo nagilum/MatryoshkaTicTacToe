@@ -308,11 +308,11 @@
             // Grid.
             for (var i = 0; i < 17; i++)
             {
-                Write(15, i, ConsoleColor.DarkGray, "         ##         ##         ");
+                Write(15, i, ConsoleColor.DarkGray, "         *         *         ");
             }
 
-            Write(15, 5, ConsoleColor.DarkGray, new string('#', 31));
-            Write(15, 11, ConsoleColor.DarkGray, new string('#', 31));
+            Write(15, 5, ConsoleColor.DarkGray, new string('*', 29));
+            Write(15, 11, ConsoleColor.DarkGray, new string('*', 29));
 
             // Cells.
             top = -6;
@@ -320,11 +320,11 @@
             for (var r = 0; r < 3; r++)
             {
                 top += 6;
-                left = 4;
+                left = 5;
 
                 for (var c = 0; c < 3; c++)
                 {
-                    left += 11;
+                    left += 10;
 
                     var bc = Board[r][c];
 
