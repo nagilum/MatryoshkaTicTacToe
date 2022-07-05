@@ -11,3 +11,7 @@ Tic Tac Toe in the terminal where you can override the opposing player if you ha
 * If it's a blank cell, you can place your points there.
 * If you've placed points there before, you can only place a higher value. Your previous set points will be lost.
 * If the opponent has placed points there, you can only place (and take over) the cell with a higher value. The opponents points are then lost.
+
+## Planned Updates
+
+* Add ability to play against the computer.
