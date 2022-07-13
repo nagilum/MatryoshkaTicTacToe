@@ -33,7 +33,7 @@ namespace MatryoshkaTicTacToe
         /// <summary>
         /// Current selector position.
         /// </summary>
-        public static Point CurrentPosition = new(2, 2);
+        public static readonly Point CurrentPosition = new(2, 2);
 
         /// <summary>
         /// The board.
