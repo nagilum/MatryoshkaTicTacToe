@@ -38,9 +38,9 @@ namespace MatryoshkaTicTacToe
                     case Scene.Game:
                         switch (key.Key)
                         {
-                            // Exit the game.
+                            // Ask for confirmation.
                             case ConsoleKey.Escape:
-                                Running = false;
+                                CurrentScene = Scene.ConfirmExit;
                                 break;
 
                             // Up.
@@ -90,6 +90,24 @@ namespace MatryoshkaTicTacToe
                             // Set 5 points.
                             case ConsoleKey.D5:
                                 SetPoints(5);
+                                break;
+                        }
+
+                        break;
+
+                    // Confirm desire to exit game.
+                    case Scene.ConfirmExit:
+                        switch (key.Key)
+                        {
+                            // Exit the game.
+                            case ConsoleKey.Enter:
+                                Running = false;
+                                break;
+
+                            // Continue playing.
+                            case ConsoleKey.Escape:
+                                Console.Clear();
+                                CurrentScene = Scene.Game;
                                 break;
                         }
 

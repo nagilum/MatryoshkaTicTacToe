@@ -10,7 +10,8 @@ namespace MatryoshkaTicTacToe
         public enum Scene
         {
             Welcome,
-            Game
+            Game,
+            ConfirmExit
         }
 
         /// <summary>
@@ -31,6 +32,10 @@ namespace MatryoshkaTicTacToe
 
                 case Scene.Game:
                     RenderGameScene();
+                    break;
+
+                case Scene.ConfirmExit:
+                    RenderConfirmExitScene();
                     break;
             }
         }
@@ -273,6 +278,19 @@ namespace MatryoshkaTicTacToe
                 25,
                 ConsoleColor.DarkGray,
                 "Press ESC to exit game.");
+        }
+
+        /// <summary>
+        /// Render the confirm exit scene.
+        /// </summary>
+        private static void RenderConfirmExitScene()
+        {
+            WriteCentered(7, ConsoleColor.White, new string('#', 33));
+            WriteCentered(8, ConsoleColor.White, "#                               #");
+            WriteCentered(9, ConsoleColor.White, "#    Press ENTER to exit game   #");
+            WriteCentered(10, ConsoleColor.White, "#      Press ESC to cancel      #");
+            WriteCentered(11, ConsoleColor.White, "#                               #");
+            WriteCentered(12, ConsoleColor.White, new string('#', 33));
         }
 
         #endregion
