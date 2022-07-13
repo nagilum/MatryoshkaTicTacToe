@@ -126,6 +126,117 @@ namespace MatryoshkaTicTacToe
         }
 
         /// <summary>
+        /// Check if a victory condition has been met.
+        /// </summary>
+        private static void CheckForVictory()
+        {
+            BoardCell bc1;
+            BoardCell bc2;
+            BoardCell bc3;
+
+            // Does a player have three in a row horisontally?
+            for (var i = 1; i < 4; i++)
+            {
+                bc1 = Board.First(n => n.X == 1 && n.Y == i);
+                bc2 = Board.First(n => n.X == 2 && n.Y == i);
+                bc3 = Board.First(n => n.X == 3 && n.Y == i);
+
+                if (!bc1.IsSet ||
+                    !bc2.IsSet ||
+                    !bc3.IsSet)
+                {
+                    continue;
+                }
+
+                if (bc1.SetForPlayer1 &&
+                    bc2.SetForPlayer1 &&
+                    bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 1 as winner!
+                }
+                else if (!bc1.SetForPlayer1 &&
+                         !bc2.SetForPlayer1 &&
+                         !bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 2 as winner!
+                }
+            }
+
+            // Does a player have three in a row vertically?
+            for (var i = 1; i < 4; i++)
+            {
+                bc1 = Board.First(n => n.X == i && n.Y == 1);
+                bc2 = Board.First(n => n.X == i && n.Y == 2);
+                bc3 = Board.First(n => n.X == i && n.Y == 3);
+
+                if (!bc1.IsSet ||
+                    !bc2.IsSet ||
+                    !bc3.IsSet)
+                {
+                    continue;
+                }
+
+                if (bc1.SetForPlayer1 &&
+                    bc2.SetForPlayer1 &&
+                    bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 1 as winner!
+                }
+                else if (!bc1.SetForPlayer1 &&
+                         !bc2.SetForPlayer1 &&
+                         !bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 2 as winner!
+                }
+            }
+
+            // Does a player have three in a row across?
+            bc1 = Board.First(n => n.X == 1 && n.Y == 1);
+            bc2 = Board.First(n => n.X == 2 && n.Y == 2);
+            bc3 = Board.First(n => n.X == 3 && n.Y == 3);
+
+            if (bc1.IsSet &&
+                bc2.IsSet &&
+                bc3.IsSet)
+            {
+                if (bc1.SetForPlayer1 &&
+                    bc2.SetForPlayer1 &&
+                    bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 1 as winner!
+                }
+                else if (!bc1.SetForPlayer1 &&
+                         !bc2.SetForPlayer1 &&
+                         !bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 2 as winner!
+                }
+            }
+
+            bc1 = Board.First(n => n.X == 1 && n.Y == 3);
+            bc2 = Board.First(n => n.X == 2 && n.Y == 2);
+            bc3 = Board.First(n => n.X == 3 && n.Y == 1);
+
+            if (bc1.IsSet &&
+                bc2.IsSet &&
+                bc3.IsSet)
+            {
+                if (bc1.SetForPlayer1 &&
+                    bc2.SetForPlayer1 &&
+                    bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 1 as winner!
+                }
+                else if (!bc1.SetForPlayer1 &&
+                         !bc2.SetForPlayer1 &&
+                         !bc3.SetForPlayer1)
+                {
+                    // TODO: Set Player 2 as winner!
+                }
+            }
+        }
+
+        /// <summary>
         /// Set points for the current player.
         /// </summary>
         /// <param name="points">Number of points to set.</param>
@@ -275,6 +386,9 @@ namespace MatryoshkaTicTacToe
                 21,
                 ConsoleColor.Black,
                 new string(' ', Console.WindowWidth));
+
+            // Check if a victory condition has been met.
+            CheckForVictory();
         }
     }
 }
